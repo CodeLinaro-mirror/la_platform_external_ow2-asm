@@ -37,10 +37,11 @@ import static org.objectweb.asm.commons.GeneratorAdapter.LE;
 import static org.objectweb.asm.commons.GeneratorAdapter.LT;
 import static org.objectweb.asm.commons.GeneratorAdapter.NE;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.objectweb.asm.ConstantDynamic;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
@@ -109,7 +110,7 @@ class GeneratorAdapterTest {
     assertEquals(Opcodes.ACC_PUBLIC, methodNode.access);
     assertEquals("name", methodNode.name);
     assertEquals("()V", methodNode.desc);
-    assertEquals(Arrays.asList("java/lang/Exception"), methodNode.exceptions);
+    assertEquals(List.of("java/lang/Exception"), methodNode.exceptions);
   }
 
   @Test
@@ -127,7 +128,7 @@ class GeneratorAdapterTest {
     assertEquals(Opcodes.ACC_PUBLIC, methodNode.access);
     assertEquals("name", methodNode.name);
     assertEquals("()V", methodNode.desc);
-    assertEquals(Arrays.asList(), methodNode.exceptions);
+    assertEquals(List.of(), methodNode.exceptions);
   }
 
   @Test
@@ -159,7 +160,7 @@ class GeneratorAdapterTest {
   void testPush_long() {
     assertEquals("LCONST_0", new Generator().push(0L));
     assertEquals("LCONST_1", new Generator().push(1L));
-    assertEquals("LDC 2", new Generator().push(2L));
+    assertEquals("LDC 2L", new Generator().push(2L));
   }
 
   @Test
@@ -167,14 +168,14 @@ class GeneratorAdapterTest {
     assertEquals("FCONST_0", new Generator().push(0.0f));
     assertEquals("FCONST_1", new Generator().push(1.0f));
     assertEquals("FCONST_2", new Generator().push(2.0f));
-    assertEquals("LDC 3.0", new Generator().push(3.0f));
+    assertEquals("LDC 3.0F", new Generator().push(3.0f));
   }
 
   @Test
   void testPush_double() {
     assertEquals("DCONST_0", new Generator().push(0.0));
     assertEquals("DCONST_1", new Generator().push(1.0));
-    assertEquals("LDC 2.0", new Generator().push(2.0));
+    assertEquals("LDC 2.0D", new Generator().push(2.0));
   }
 
   @Test
@@ -186,6 +187,8 @@ class GeneratorAdapterTest {
   @Test
   void testPush_type() {
     assertEquals("ACONST_NULL", new Generator().push((Type) null));
+    assertEquals(
+        "GETSTATIC java/lang/Void.TYPE : Ljava/lang/Class;", new Generator().push(Type.VOID_TYPE));
     assertEquals(
         "GETSTATIC java/lang/Boolean.TYPE : Ljava/lang/Class;",
         new Generator().push(Type.BOOLEAN_TYPE));
@@ -216,7 +219,7 @@ class GeneratorAdapterTest {
   void testPush_handle() {
     assertEquals("ACONST_NULL", new Generator().push((Handle) null));
     assertEquals(
-        "LDC pkg/Owner.nameI (2)",
+        "// handle kind 0x2 : GETSTATIC\n" + "    LDC pkg/Owner.name(I)",
         new Generator().push(new Handle(Opcodes.H_GETSTATIC, "pkg/Owner", "name", "I", false)));
   }
 
@@ -763,6 +766,28 @@ class GeneratorAdapterTest {
   }
 
   @Test
+  void testConstantDynamic() {
+    assertEquals(
+        "LDC name : Ljava/lang/Object; [\n"
+            + "      // handle kind 0x2 : GETSTATIC\n"
+            + "      pkg/Owner.name(I)\n"
+            + "      // arguments:\n"
+            + "      1, \n"
+            + "      2, \n"
+            + "      3\n"
+            + "    ]",
+        new Generator()
+            .push(
+                new ConstantDynamic(
+                    "name",
+                    "Ljava/lang/Object;",
+                    new Handle(Opcodes.H_GETSTATIC, "pkg/Owner", "name", "I", false),
+                    1,
+                    2,
+                    3)));
+  }
+
+  @Test
   void testNewInstance() {
     assertEquals("NEW pkg/Class", new Generator().newInstance(Type.getObjectType("pkg/Class")));
   }
@@ -899,6 +924,11 @@ class GeneratorAdapterTest {
 
     public String push(final Handle handle) {
       generatorAdapter.push(handle);
+      return toString();
+    }
+
+    public String push(final ConstantDynamic constantDynamic) {
+      generatorAdapter.push(constantDynamic);
       return toString();
     }
 
