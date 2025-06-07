@@ -102,13 +102,13 @@ class AnalyzerWithBasicInterpreterTest extends AsmTest {
           }
         };
 
-    ArrayList<Frame<? extends BasicValue>[]> methodFrames = new ArrayList<>();
+    ArrayList<Frame<BasicValue>[]> methodFrames = new ArrayList<>();
     for (MethodNode methodNode : classNode.methods) {
       methodFrames.add(analyzer.analyze(classNode.name, methodNode));
     }
 
-    for (Frame<? extends BasicValue>[] frames : methodFrames) {
-      for (Frame<? extends BasicValue> frame : frames) {
+    for (Frame<BasicValue>[] frames : methodFrames) {
+      for (Frame<BasicValue> frame : frames) {
         assertTrue(frame == null || frame instanceof CustomFrame);
       }
     }
@@ -156,7 +156,7 @@ class AnalyzerWithBasicInterpreterTest extends AsmTest {
   @Test
   void testAnalyzeAndComputeMaxs_staticMethod() throws AnalyzerException {
     MethodNode methodNode =
-        new MethodNodeBuilder("(I)V", /* maxStack = */ 0, /* maxLocals = */ 0).vreturn().build();
+        new MethodNodeBuilder("(I)V", /* maxStack= */ 0, /* maxLocals= */ 0).vreturn().build();
     methodNode.access |= Opcodes.ACC_STATIC;
     Analyzer<BasicValue> analyzer = new Analyzer<BasicValue>(new BasicInterpreter());
 

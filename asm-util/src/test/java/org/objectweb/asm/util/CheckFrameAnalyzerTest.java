@@ -27,6 +27,7 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 package org.objectweb.asm.util;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -62,6 +63,22 @@ class CheckFrameAnalyzerTest extends AsmTest {
 
   // Labels used to generate test cases.
   private final Label label0 = new Label();
+
+  @Test
+  void testAnalyze_validBytecode() {
+    MethodNode methodNode =
+        new MethodNodeBuilder("(Ljava/lang/Object;)V", 1, 2)
+            .aload(0)
+            .astore(1)
+            .iconst_0()
+            .istore(0)
+            .vreturn()
+            .build();
+
+    Executable analyze = () -> newAnalyzer().analyze(CLASS_NAME, methodNode);
+
+    assertDoesNotThrow(analyze);
+  }
 
   @Test
   void testAnalyze_invalidJsr() {
@@ -135,7 +152,7 @@ class CheckFrameAnalyzerTest extends AsmTest {
   @Test
   void testAnalyze_invalidAppendFrame() {
     MethodNode methodNode =
-        new MethodNodeBuilder(/* maxStack = */ 0, /* maxLocals = */ 1)
+        new MethodNodeBuilder(/* maxStack= */ 0, /* maxLocals= */ 1)
             .nop()
             .frame(Opcodes.F_APPEND, new Object[] {Opcodes.INTEGER}, null)
             .vreturn()
@@ -151,7 +168,7 @@ class CheckFrameAnalyzerTest extends AsmTest {
   @Test
   void testAnalyze_invalidChopFrame() {
     MethodNode methodNode =
-        new MethodNodeBuilder(/* maxStack = */ 0, /* maxLocals = */ 1)
+        new MethodNodeBuilder(/* maxStack= */ 0, /* maxLocals= */ 1)
             .nop()
             .frame(Opcodes.F_CHOP, new Object[] {null, null}, null)
             .vreturn()
@@ -166,7 +183,7 @@ class CheckFrameAnalyzerTest extends AsmTest {
   @Test
   void testAnalyze_illegalStackMapFrameValue() {
     MethodNode methodNode =
-        new MethodNodeBuilder(/* maxStack = */ 0, /* maxLocals = */ 2)
+        new MethodNodeBuilder(/* maxStack= */ 0, /* maxLocals= */ 2)
             .nop()
             .frame(Opcodes.F_APPEND, new Object[] {new Object()}, null)
             .vreturn()
@@ -182,7 +199,7 @@ class CheckFrameAnalyzerTest extends AsmTest {
   @Test
   void testAnalyze_illegalLabelNodeStackMapFrameValue() {
     MethodNode methodNode =
-        new MethodNodeBuilder(/* maxStack = */ 0, /* maxLocals = */ 2)
+        new MethodNodeBuilder(/* maxStack= */ 0, /* maxLocals= */ 2)
             .nop()
             .frame(Opcodes.F_APPEND, new Object[] {new LabelNode(label0)}, null)
             .label(label0)
