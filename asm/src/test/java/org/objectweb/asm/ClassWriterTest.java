@@ -31,6 +31,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -66,8 +67,8 @@ class ClassWriterTest extends AsmTest {
   /**
    * Tests that the non-static fields of ClassWriter are the expected ones. This test is designed to
    * fail each time new fields are added to ClassWriter, and serves as a reminder to update the
-   * field reset logic in {@link ClassWriter#replaceAsmInstructions()}, if needed, each time a new
-   * field is added.
+   * field reset logic in {@link ClassWriter#replaceAsmInstructions(byte[], boolean)}, if needed,
+   * each time a new field is added.
    */
   @Test
   void testInstanceFields() {
@@ -78,41 +79,40 @@ class ClassWriterTest extends AsmTest {
             .collect(toSet());
 
     Set<String> expectedFields =
-        new HashSet<String>(
-            Arrays.asList(
-                "flags",
-                "version",
-                "symbolTable",
-                "accessFlags",
-                "thisClass",
-                "superClass",
-                "interfaceCount",
-                "interfaces",
-                "firstField",
-                "lastField",
-                "firstMethod",
-                "lastMethod",
-                "numberOfInnerClasses",
-                "innerClasses",
-                "enclosingClassIndex",
-                "enclosingMethodIndex",
-                "signatureIndex",
-                "sourceFileIndex",
-                "debugExtension",
-                "lastRuntimeVisibleAnnotation",
-                "lastRuntimeInvisibleAnnotation",
-                "lastRuntimeVisibleTypeAnnotation",
-                "lastRuntimeInvisibleTypeAnnotation",
-                "moduleWriter",
-                "nestHostClassIndex",
-                "numberOfNestMemberClasses",
-                "nestMemberClasses",
-                "numberOfPermittedSubclasses",
-                "permittedSubclasses",
-                "firstRecordComponent",
-                "lastRecordComponent",
-                "firstAttribute",
-                "compute"));
+        Set.of(
+            "flags",
+            "version",
+            "symbolTable",
+            "accessFlags",
+            "thisClass",
+            "superClass",
+            "interfaceCount",
+            "interfaces",
+            "firstField",
+            "lastField",
+            "firstMethod",
+            "lastMethod",
+            "numberOfInnerClasses",
+            "innerClasses",
+            "enclosingClassIndex",
+            "enclosingMethodIndex",
+            "signatureIndex",
+            "sourceFileIndex",
+            "debugExtension",
+            "lastRuntimeVisibleAnnotation",
+            "lastRuntimeInvisibleAnnotation",
+            "lastRuntimeVisibleTypeAnnotation",
+            "lastRuntimeInvisibleTypeAnnotation",
+            "moduleWriter",
+            "nestHostClassIndex",
+            "numberOfNestMemberClasses",
+            "nestMemberClasses",
+            "numberOfPermittedSubclasses",
+            "permittedSubclasses",
+            "firstRecordComponent",
+            "lastRecordComponent",
+            "firstAttribute",
+            "compute");
     // IMPORTANT: if this fails, update the string list AND update the logic that resets the
     // ClassWriter fields in ClassWriter.toByteArray(), if needed (this logic is used to do a
     // ClassReader->ClassWriter round trip to remove the ASM specific instructions due to large
@@ -244,6 +244,16 @@ class ClassWriterTest extends AsmTest {
     assertTrue(
         getConstantPoolDump(classWriter)
             .contains("constant_pool: ConstantMethodHandleInfo 1.ConstantFieldRefInfo A.hI"));
+  }
+
+  @Test
+  void testNewHandleIsInterface() {
+    ClassWriter classWriter = newEmptyClassWriter();
+
+    int index1 = classWriter.newHandle(Opcodes.H_INVOKEVIRTUAL, "A", "m", "()V", false);
+    int index2 = classWriter.newHandle(Opcodes.H_INVOKEVIRTUAL, "A", "m", "()V", true);
+
+    assertNotEquals(index1, index2);
   }
 
   @Test

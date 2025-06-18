@@ -255,6 +255,9 @@ class ConstantsTest {
       case "V20":
       case "V21":
       case "V22":
+      case "V23":
+      case "V24":
+      case "V25":
         return ConstantType.CLASS_VERSION;
       case "ACC_PUBLIC":
       case "ACC_PRIVATE":
@@ -563,7 +566,7 @@ class ConstantsTest {
 
   private static int getIntegerValue(final Field field) {
     try {
-      return ((Integer) field.get(null)).intValue();
+      return (int) field.get(null);
     } catch (IllegalAccessException e) {
       throw new IllegalArgumentException(e);
     }
