@@ -123,7 +123,7 @@ public class Analyzer<V extends Value> implements Opcodes {
       TryCatchBlockNode tryCatchBlock = method.tryCatchBlocks.get(i);
       int startIndex = insnList.indexOf(tryCatchBlock.start);
       int endIndex = insnList.indexOf(tryCatchBlock.end);
-      for (int j = startIndex; j <= endIndex; ++j) {
+      for (int j = startIndex; j < endIndex; ++j) {
         List<TryCatchBlockNode> insnHandlers = handlers[j];
         if (insnHandlers == null) {
           insnHandlers = new ArrayList<>();
@@ -165,6 +165,8 @@ public class Analyzer<V extends Value> implements Opcodes {
         if (insnType == AbstractInsnNode.LABEL
             || insnType == AbstractInsnNode.LINE
             || insnType == AbstractInsnNode.FRAME) {
+          // Update the current frame, so it can be used during processing for this instruction
+          currentFrame.init(oldFrame);
           merge(insnIndex + 1, oldFrame, subroutine);
           newControlFlowEdge(insnIndex, insnIndex + 1);
         } else {
@@ -174,7 +176,7 @@ public class Analyzer<V extends Value> implements Opcodes {
           if (insnNode instanceof JumpInsnNode) {
             JumpInsnNode jumpInsn = (JumpInsnNode) insnNode;
             if (insnOpcode != GOTO && insnOpcode != JSR) {
-              currentFrame.initJumpTarget(insnOpcode, /* target = */ null);
+              currentFrame.initJumpTarget(insnOpcode, /* target= */ null);
               merge(insnIndex + 1, currentFrame, subroutine);
               newControlFlowEdge(insnIndex, insnIndex + 1);
             }
@@ -263,9 +265,18 @@ public class Analyzer<V extends Value> implements Opcodes {
               catchType = Type.getObjectType(tryCatchBlock.type);
             }
             if (newControlFlowExceptionEdge(insnIndex, tryCatchBlock)) {
+              // Merge the frame *before* this instruction, with its stack cleared and an exception
+              // pushed, with the handler's frame.
               Frame<V> handler = newFrame(oldFrame);
               handler.clearStack();
-              handler.push(interpreter.newExceptionValue(tryCatchBlock, handler, catchType));
+              V exceptionValue = interpreter.newExceptionValue(tryCatchBlock, handler, catchType);
+              handler.push(exceptionValue);
+              merge(insnList.indexOf(tryCatchBlock.handler), handler, subroutine);
+              // Merge the frame *after* this instruction, with its stack cleared and an exception
+              // pushed, with the handler's frame.
+              handler = newFrame(currentFrame);
+              handler.clearStack();
+              handler.push(exceptionValue);
               merge(insnList.indexOf(tryCatchBlock.handler), handler, subroutine);
             }
           }
