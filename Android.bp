@@ -36,6 +36,8 @@ java_library {
         "ow2-asm",
         "ow2-asm-tree",
     ],
+    // b/267831518: Pin tradefed and dependencies to Java 11.
+    java_version: "11",
     sdk_version: "core_current",
 }
 
@@ -46,6 +48,8 @@ java_library {
     libs: [
         "ow2-asm",
     ],
+    // b/267831518: Pin tradefed and dependencies to Java 11.
+    java_version: "11",
     sdk_version: "core_current",
 }
 
