@@ -10,6 +10,7 @@ license {
 
 java_library {
     name: "ow2-asm",
+    defaults: ["error_prone_dependency_defaults"],
     host_supported: true,
     srcs: ["asm/src/main/**/*.java"],
     // b/267831518: Pin tradefed and dependencies to Java 11.
