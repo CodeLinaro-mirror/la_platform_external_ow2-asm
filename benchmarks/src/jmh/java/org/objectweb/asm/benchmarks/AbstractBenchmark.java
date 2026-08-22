@@ -60,9 +60,9 @@ public abstract class AbstractBenchmark {
   private static final String ASM_CORE_CURRENT = "/asm/build/classes/java/main/";
   private static final String ASM_TREE_CURRENT = "/asm-tree/build/classes/java/main/";
 
-  // The directory where the Java 8 input data classes for the benchmarks can be found.
-  private static final String INPUT_CLASSES_JAVA8 =
-      "/benchmarks/build/input-classes-java8/io/vavr/control/";
+  // The directory where the Java 11 input data classes for the benchmarks can be found.
+  private static final String INPUT_CLASSES_JAVA11 =
+      "/benchmarks/build/input-classes-java11/io/vavr/control/";
 
   private final String asmBenchmarkClass;
 
@@ -130,7 +130,7 @@ public abstract class AbstractBenchmark {
     java8classFiles = new ArrayList<>();
     findClasses(new File(ROOT_DIR + ASM_CORE_CURRENT), classFiles);
     findClasses(new File(ROOT_DIR + ASM_TREE_CURRENT), classFiles);
-    findClasses(new File(ROOT_DIR + INPUT_CLASSES_JAVA8), java8classFiles);
+    findClasses(new File(ROOT_DIR + INPUT_CLASSES_JAVA11), java8classFiles);
   }
 
   private static void findClasses(final File directory, final ArrayList<byte[]> classFiles)
