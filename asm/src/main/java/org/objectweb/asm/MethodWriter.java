@@ -2336,7 +2336,7 @@ final class MethodWriter extends MethodVisitor {
           offset += 4;
           break;
         default:
-          throw new AssertionError();
+          throw new IllegalArgumentException();
       }
     }
 
