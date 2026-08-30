@@ -472,6 +472,12 @@ final class MethodWriter extends MethodVisitor {
   private final int compute;
 
   /**
+   * The memory and time limits to compute the maximum stack and locals, or the stack map frames
+   * (depending on {@link #compute}).
+   */
+  private final ComputeLimits limits;
+
+  /**
    * The first basic block of the method. The next ones (in bytecode offset order) can be accessed
    * with the {@link Label#nextBasicBlock} field.
    */
@@ -585,6 +591,7 @@ final class MethodWriter extends MethodVisitor {
    * @param signature the method's signature. May be {@literal null}.
    * @param exceptions the internal names of the method's exceptions. May be {@literal null}.
    * @param compute indicates what must be computed (see #compute).
+   * @param limits the memory and time limits for {@link #visitMaxs}.
    */
   MethodWriter(
       final SymbolTable symbolTable,
@@ -593,7 +600,8 @@ final class MethodWriter extends MethodVisitor {
       final String descriptor,
       final String signature,
       final String[] exceptions,
-      final int compute) {
+      final int compute,
+      final ComputeLimits limits) {
     super(/* latest api = */ Opcodes.ASM9);
     this.symbolTable = symbolTable;
     this.accessFlags = "<init>".equals(name) ? access | Constants.ACC_CONSTRUCTOR : access;
@@ -613,6 +621,7 @@ final class MethodWriter extends MethodVisitor {
       this.exceptionIndexTable = null;
     }
     this.compute = compute;
+    this.limits = limits;
     if (compute != COMPUTE_NOTHING) {
       // Update maxLocals and currentLocals.
       int argumentsSize = Type.getArgumentsAndReturnSizes(descriptor) >> 2;
@@ -745,7 +754,7 @@ final class MethodWriter extends MethodVisitor {
         // This should happen only once, for the implicit first frame (which is explicitly visited
         // in ClassReader if the EXPAND_ASM_INSNS option is used - and COMPUTE_INSERTED_FRAMES
         // can't be set if EXPAND_ASM_INSNS is not used).
-        currentBasicBlock.frame = new CurrentFrame(currentBasicBlock);
+        currentBasicBlock.frame = new CurrentFrame(currentBasicBlock, limits);
         currentBasicBlock.frame.setInputFrameFromDescriptor(
             symbolTable, accessFlags, descriptor, numLocal);
         currentBasicBlock.frame.accept(this);
@@ -762,7 +771,7 @@ final class MethodWriter extends MethodVisitor {
     } else if (type == Opcodes.F_NEW) {
       if (previousFrame == null) {
         int argumentsSize = Type.getArgumentsAndReturnSizes(descriptor) >> 2;
-        Frame implicitFirstFrame = new Frame(new Label());
+        Frame implicitFirstFrame = new Frame(new Label(), limits);
         implicitFirstFrame.setInputFrameFromDescriptor(
             symbolTable, accessFlags, descriptor, argumentsSize);
         implicitFirstFrame.accept(this);
@@ -1241,7 +1250,7 @@ final class MethodWriter extends MethodVisitor {
       // Make it the new current basic block.
       currentBasicBlock = label;
       // Here label.frame should be null.
-      label.frame = new Frame(label);
+      label.frame = new Frame(label, limits);
     } else if (compute == COMPUTE_INSERTED_FRAMES) {
       if (currentBasicBlock == null) {
         // This case should happen only once, for the visitLabel call in the constructor. Indeed, if
@@ -1593,6 +1602,7 @@ final class MethodWriter extends MethodVisitor {
         maxStackSize = maxBlockStackSize;
       }
       // Update the successor blocks of basicBlock in the control flow graph.
+      int numOperations = 0;
       Edge outgoingEdge = basicBlock.outgoingEdges;
       while (outgoingEdge != null) {
         Label successorBlock = outgoingEdge.successor.getCanonicalInstance();
@@ -1605,6 +1615,7 @@ final class MethodWriter extends MethodVisitor {
           listOfBlocksToProcess = successorBlock;
         }
         outgoingEdge = outgoingEdge.nextEdge;
+        numOperations += Frame.NUM_OPERATIONS_PER_MERGE + 5;
       }
       // Also process the implicit successors (the catch block of each covering try/catch).
       int basicBlockOffset = basicBlock.bytecodeOffset;
@@ -1626,9 +1637,12 @@ final class MethodWriter extends MethodVisitor {
             successorBlock.nextListElement = listOfBlocksToProcess;
             listOfBlocksToProcess = successorBlock;
           }
+          numOperations += Frame.NUM_OPERATIONS_PER_MERGE + 5;
         }
+        numOperations += 3;
         handler = handler.nextHandler;
       }
+      limits.checkNewOperations(numOperations);
     }
 
     // Loop over all the basic blocks and visit the stack map frames that must be stored in the
@@ -1676,7 +1690,7 @@ final class MethodWriter extends MethodVisitor {
       // First step: find the subroutines. This step determines, for each basic block, to which
       // subroutine(s) it belongs. Start with the main "subroutine":
       short numSubroutines = 1;
-      firstBasicBlock.markSubroutine(numSubroutines, firstHandler);
+      firstBasicBlock.markSubroutine(numSubroutines, firstHandler, limits);
       // Then, mark the subroutines called by the main subroutine, then the subroutines called by
       // those called by the main subroutine, etc.
       for (short currentSubroutine = 1; currentSubroutine <= numSubroutines; ++currentSubroutine) {
@@ -1687,7 +1701,7 @@ final class MethodWriter extends MethodVisitor {
             Label jsrTarget = basicBlock.outgoingEdges.nextEdge.successor;
             if (jsrTarget.subroutineId == 0) {
               // If this subroutine has not been marked yet, find its basic blocks.
-              jsrTarget.markSubroutine(++numSubroutines, firstHandler);
+              jsrTarget.markSubroutine(++numSubroutines, firstHandler, limits);
             }
           }
           basicBlock = basicBlock.nextBasicBlock;
@@ -1702,7 +1716,7 @@ final class MethodWriter extends MethodVisitor {
           // By construction, jsr targets are stored in the second outgoing edge of basic blocks
           // that ends with a jsr instruction (see {@link #FLAG_SUBROUTINE_CALLER}).
           Label subroutine = basicBlock.outgoingEdges.nextEdge.successor;
-          subroutine.addSubroutineRetSuccessors(basicBlock, firstHandler);
+          subroutine.addSubroutineRetSuccessors(basicBlock, firstHandler, limits);
         }
         basicBlock = basicBlock.nextBasicBlock;
       }
@@ -1738,6 +1752,7 @@ final class MethodWriter extends MethodVisitor {
         // {@link Label#FLAG_SUBROUTINE_CALLER}).
         outgoingEdge = outgoingEdge.nextEdge;
       }
+      int numOperations = 10;
       while (outgoingEdge != null) {
         Label successorBlock = outgoingEdge.successor;
         if (successorBlock.nextListElement == null) {
@@ -1746,6 +1761,7 @@ final class MethodWriter extends MethodVisitor {
           listOfBlocksToProcess = successorBlock;
         }
         outgoingEdge = outgoingEdge.nextEdge;
+        numOperations += 5;
       }
       // Also process the implicit successors (the catch block of each covering try/catch).
       int basicBlockOffset = basicBlock.bytecodeOffset;
@@ -1762,7 +1778,9 @@ final class MethodWriter extends MethodVisitor {
           }
         }
         handler = handler.nextHandler;
+        numOperations += 10;
       }
+      limits.checkNewOperations(numOperations);
     }
     this.maxStack = maxStackSize;
   }
@@ -1797,7 +1815,7 @@ final class MethodWriter extends MethodVisitor {
   private void endCurrentBasicBlockWithNoSuccessor() {
     if (compute == COMPUTE_ALL_FRAMES) {
       Label nextBasicBlock = new Label();
-      nextBasicBlock.frame = new Frame(nextBasicBlock);
+      nextBasicBlock.frame = new Frame(nextBasicBlock, limits);
       nextBasicBlock.resolve(code.data, stackMapTableEntries, code.length);
       lastBasicBlock.nextBasicBlock = nextBasicBlock;
       lastBasicBlock = nextBasicBlock;
@@ -1823,7 +1841,7 @@ final class MethodWriter extends MethodVisitor {
   int visitFrameStart(final int offset, final int numLocal, final int numStack) {
     int frameLength = 3 + numLocal + numStack;
     if (currentFrame == null || currentFrame.length < frameLength) {
-      currentFrame = new int[frameLength];
+      currentFrame = limits.checkNewIntArray(frameLength);
     }
     currentFrame[0] = offset;
     currentFrame[1] = numLocal;
