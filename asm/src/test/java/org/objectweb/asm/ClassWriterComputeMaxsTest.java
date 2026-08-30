@@ -139,14 +139,7 @@ class ClassWriterComputeMaxsTest {
     if (numSubroutines == 1) {
       Map<String, Set<String>> expectedControlFlowGraph =
           controlFlowGraph(
-              "N0=N2",
-              "N2=N22,N8",
-              "N8=N14",
-              "N12=",
-              "N14=N12,N25",
-              "N22=N14,N8",
-              "N25=N27,N8",
-              "N27=");
+              "N0=N2", "N2=N22", "N8=N14", "N12=", "N14=N12,N25", "N22=N14", "N25=N27", "N27=");
       assertEquals(expectedControlFlowGraph, controlFlowGraph);
     }
     assertDoesNotThrow(() -> new ClassFile(classFile).newInstance());
@@ -218,13 +211,13 @@ class ClassWriterComputeMaxsTest {
     Map<String, Set<String>> expectedControlFlowGraph =
         controlFlowGraph(
             "N0=N2",
-            "N2=N34,N8",
+            "N2=N34",
             "N8=N16",
             "N12=",
             "N16=N29,N32",
             "N29=N32",
             "N32=N37,N12",
-            "N34=N16,N8",
+            "N34=N16",
             "N37=");
     assertEquals(expectedControlFlowGraph, controlFlowGraph);
     assertDoesNotThrow(() -> new ClassFile(classFile).newInstance());
@@ -301,12 +294,12 @@ class ClassWriterComputeMaxsTest {
     Map<String, Set<String>> expectedControlFlowGraph =
         controlFlowGraph(
             "N0=N2",
-            "N2=N11,N19",
-            "N8=N11,N46",
+            "N2=N19",
+            "N8=N46",
             "N11=N19",
             "N16=",
-            "N19=N30,N38",
-            "N26=N16,N30,N8",
+            "N19=N38",
+            "N26=N16,N8",
             "N30=N38",
             "N35=",
             "N38=N26,N35",
@@ -375,7 +368,7 @@ class ClassWriterComputeMaxsTest {
     assertEquals(4, methodInfo.maxLocals);
     Map<String, Set<String>> expectedControlFlowGraph =
         controlFlowGraph(
-            "N0=N2", "N2=N11,N19", "N8=N11,N26", "N11=N19", "N15=", "N19=N29", "N26=N2", "N29=");
+            "N0=N2", "N2=N19", "N8=N26", "N11=N19", "N15=", "N19=N29", "N26=N2", "N29=");
     assertEquals(expectedControlFlowGraph, controlFlowGraph);
     assertDoesNotThrow(() -> new ClassFile(classFile).newInstance());
   }
@@ -485,8 +478,8 @@ class ClassWriterComputeMaxsTest {
         controlFlowGraph(
             "N0=N2",
             "N2=N6,N33",
-            "N6=N23,N15",
-            "N12=N30,N15",
+            "N6=N23",
+            "N12=N30",
             "N15=N23",
             "N19=",
             "N23=N33",
@@ -583,13 +576,13 @@ class ClassWriterComputeMaxsTest {
     Map<String, Set<String>> expectedControlFlowGraph =
         controlFlowGraph(
             "N0=N2",
-            "N2=N6,N14",
-            "N5=N6",
+            "N2=N14",
+            "N5=",
             "N6=N14",
             "N10=",
             "N14=N41",
-            "N21=N25,N33",
-            "N24=N25",
+            "N21=N33",
+            "N24=",
             "N25=N33",
             "N31=",
             "N33=N31,N45,N24",
@@ -770,18 +763,18 @@ class ClassWriterComputeMaxsTest {
     Map<String, Set<String>> expectedControlFlowGraph =
         controlFlowGraph(
             "N0=N2",
-            "N2=N6,N45,N12",
-            "N5=N6,N45",
-            "N6=N45,N12",
-            "N10=N45",
-            "N12=N39,N45",
-            "N17=N23,N45,N29",
-            "N20=N23,N45",
-            "N23=N45,N29",
-            "N27=N45",
-            "N29=N43,N45,N20,N27",
-            "N39=N43,N45,N17",
-            "N43=N45,N5,N10",
+            "N2=N12",
+            "N5=",
+            "N6=N12",
+            "N10=",
+            "N12=N39",
+            "N17=N29",
+            "N20=",
+            "N23=N29",
+            "N27=",
+            "N29=N43,N20,N27",
+            "N39=N43,N17",
+            "N43=N5,N10",
             "N45=");
     assertEquals(expectedControlFlowGraph, controlFlowGraph);
     assertDoesNotThrow(() -> new ClassFile(classFile).newInstance());
@@ -851,17 +844,17 @@ class ClassWriterComputeMaxsTest {
     assertEquals(3, methodInfo.maxLocals);
     Map<String, Set<String>> expectedControlFlowGraph =
         controlFlowGraph(
-            "N0=N6,N12,N24,N38",
-            "N3=N15,N24,N38",
-            "N6=N6,N12,N24,N38",
-            "N10=N24,N38",
-            "N12=N3,N10,N24,N38",
-            "N15=N21,N24,N38",
-            "N21=N30,N38",
-            "N24=N30,N38",
-            "N30=N0,N38,N44",
+            "N0=N12",
+            "N3=N15",
+            "N6=N12",
+            "N10=",
+            "N12=N3,N10",
+            "N15=N21",
+            "N21=N30",
+            "N24=N30",
+            "N30=N0,N44",
             "N37=",
-            "N38=N38,N44",
+            "N38=N44",
             "N42=",
             "N44=N37,N42");
     assertEquals(expectedControlFlowGraph, controlFlowGraph);
