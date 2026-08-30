@@ -36,8 +36,8 @@ package org.objectweb.asm;
  */
 final class CurrentFrame extends Frame {
 
-  CurrentFrame(final Label owner) {
-    super(owner);
+  CurrentFrame(final Label owner, final ComputeLimits limits) {
+    super(owner, limits);
   }
 
   /**
@@ -49,7 +49,7 @@ final class CurrentFrame extends Frame {
   void execute(
       final int opcode, final int arg, final Symbol symbolArg, final SymbolTable symbolTable) {
     super.execute(opcode, arg, symbolArg, symbolTable);
-    Frame successor = new Frame(null);
+    Frame successor = new Frame(null, limits);
     merge(symbolTable, successor, 0);
     copyFrom(successor);
   }
