@@ -218,6 +218,7 @@ public class AnnotationNode extends AnnotationVisitor {
         if (arrayAnnotationVisitor != null) {
           List<?> arrayValue = (List<?>) value;
           for (int i = 0, n = arrayValue.size(); i < n; ++i) {
+            // Recursion is OK because ClassReader rejects classes with too many nested annotations.
             accept(arrayAnnotationVisitor, null, arrayValue.get(i));
           }
           arrayAnnotationVisitor.visitEnd();

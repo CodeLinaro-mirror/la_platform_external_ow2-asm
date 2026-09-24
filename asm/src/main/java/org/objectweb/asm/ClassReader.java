@@ -616,7 +616,8 @@ public class ClassReader {
                 classVisitor.visitAnnotation(annotationDescriptor, /* visible= */ true),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -634,7 +635,8 @@ public class ClassReader {
                 classVisitor.visitAnnotation(annotationDescriptor, /* visible= */ false),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -658,7 +660,8 @@ public class ClassReader {
                     /* visible= */ true),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -682,7 +685,8 @@ public class ClassReader {
                     /* visible= */ false),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -976,7 +980,8 @@ public class ClassReader {
                 recordComponentVisitor.visitAnnotation(annotationDescriptor, /* visible= */ true),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -994,7 +999,8 @@ public class ClassReader {
                 recordComponentVisitor.visitAnnotation(annotationDescriptor, /* visible= */ false),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -1018,7 +1024,8 @@ public class ClassReader {
                     /* visible= */ true),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -1042,7 +1049,8 @@ public class ClassReader {
                     /* visible= */ false),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -1160,7 +1168,8 @@ public class ClassReader {
                 fieldVisitor.visitAnnotation(annotationDescriptor, /* visible= */ true),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -1178,7 +1187,8 @@ public class ClassReader {
                 fieldVisitor.visitAnnotation(annotationDescriptor, /* visible= */ false),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -1202,7 +1212,8 @@ public class ClassReader {
                     /* visible= */ true),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -1226,7 +1237,8 @@ public class ClassReader {
                     /* visible= */ false),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -1401,7 +1413,7 @@ public class ClassReader {
     // Visit the AnnotationDefault attribute.
     if (annotationDefaultOffset != 0) {
       AnnotationVisitor annotationVisitor = methodVisitor.visitAnnotationDefault();
-      readElementValue(annotationVisitor, annotationDefaultOffset, null, charBuffer);
+      readElementValue(annotationVisitor, annotationDefaultOffset, null, charBuffer, 0);
       if (annotationVisitor != null) {
         annotationVisitor.visitEnd();
       }
@@ -1421,7 +1433,8 @@ public class ClassReader {
                 methodVisitor.visitAnnotation(annotationDescriptor, /* visible= */ true),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -1439,7 +1452,8 @@ public class ClassReader {
                 methodVisitor.visitAnnotation(annotationDescriptor, /* visible= */ false),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -1463,7 +1477,8 @@ public class ClassReader {
                     /* visible= */ true),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -1487,7 +1502,8 @@ public class ClassReader {
                     /* visible= */ false),
                 currentAnnotationOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
 
@@ -2523,7 +2539,8 @@ public class ClassReader {
                   /* visible= */ true),
               currentAnnotationOffset,
               /* named= */ true,
-              charBuffer);
+              charBuffer,
+              0);
         }
         currentVisibleTypeAnnotationBytecodeOffset =
             getTypeAnnotationBytecodeOffset(
@@ -2551,7 +2568,8 @@ public class ClassReader {
                   /* visible= */ false),
               currentAnnotationOffset,
               /* named= */ true,
-              charBuffer);
+              charBuffer,
+              0);
         }
         currentInvisibleTypeAnnotationBytecodeOffset =
             getTypeAnnotationBytecodeOffset(
@@ -2624,7 +2642,8 @@ public class ClassReader {
                   /* visible= */ true),
               currentOffset,
               /* named= */ true,
-              charBuffer);
+              charBuffer,
+              0);
         }
       }
     }
@@ -2652,7 +2671,8 @@ public class ClassReader {
                   /* visible= */ false),
               currentOffset,
               /* named= */ true,
-              charBuffer);
+              charBuffer,
+              0);
         }
       }
     }
@@ -2825,7 +2845,8 @@ public class ClassReader {
                     targetType & 0xFFFFFF00, path, annotationDescriptor, visible),
                 currentOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       } else {
         // We don't want to visit the other target_type annotations, so we just skip them (which
         // requires some parsing because the element_value_pairs array has a variable size). First,
@@ -2835,7 +2856,7 @@ public class ClassReader {
         // with a null AnnotationVisitor).
         currentOffset =
             readElementValues(
-                /* annotationVisitor= */ null, currentOffset, /* named= */ true, charBuffer);
+                /* annotationVisitor= */ null, currentOffset, /* named= */ true, charBuffer, 0);
       }
     }
     return typeAnnotationsOffsets;
@@ -2976,7 +2997,8 @@ public class ClassReader {
                 methodVisitor.visitParameterAnnotation(i, annotationDescriptor, visible),
                 currentOffset,
                 /* named= */ true,
-                charBuffer);
+                charBuffer,
+                0);
       }
     }
   }
@@ -2993,13 +3015,18 @@ public class ClassReader {
    *     of a JVMS 'annotation' structure, and false to parse the JVMS 'array_value' of an
    *     annotation's element_value.
    * @param charBuffer the buffer used to read strings in the constant pool.
+   * @param depth the depth of these annotation values in the annotation tree structure.
    * @return the end offset of the JVMS 'annotation' or 'array_value' structure.
    */
   private int readElementValues(
       final AnnotationVisitor annotationVisitor,
       final int annotationOffset,
       final boolean named,
-      final char[] charBuffer) {
+      final char[] charBuffer,
+      final int depth) {
+    if (depth >= 256) {
+      throw new LimitExceededException("Too many nested annotations");
+    }
     int currentOffset = annotationOffset;
     // Read the num_element_value_pairs field (or num_values field for an array_value).
     int numElementValuePairs = readUnsignedShort(currentOffset);
@@ -3009,13 +3036,14 @@ public class ClassReader {
       while (numElementValuePairs-- > 0) {
         String elementName = readUTF8(currentOffset, charBuffer);
         currentOffset =
-            readElementValue(annotationVisitor, currentOffset + 2, elementName, charBuffer);
+            readElementValue(annotationVisitor, currentOffset + 2, elementName, charBuffer, depth);
       }
     } else {
       // Parse the array_value array.
       while (numElementValuePairs-- > 0) {
         currentOffset =
-            readElementValue(annotationVisitor, currentOffset, /* elementName= */ null, charBuffer);
+            readElementValue(
+                annotationVisitor, currentOffset, /* elementName= */ null, charBuffer, depth);
       }
     }
     if (annotationVisitor != null) {
@@ -3032,22 +3060,26 @@ public class ClassReader {
    *     structure to be read.
    * @param elementName the name of the element_value structure to be read, or {@literal null}.
    * @param charBuffer the buffer used to read strings in the constant pool.
+   * @param depth the depth of this element value in the annotation tree structure.
    * @return the end offset of the JVMS 'element_value' structure.
    */
   private int readElementValue(
       final AnnotationVisitor annotationVisitor,
       final int elementValueOffset,
       final String elementName,
-      final char[] charBuffer) {
+      final char[] charBuffer,
+      final int depth) {
     int currentOffset = elementValueOffset;
     if (annotationVisitor == null) {
       switch (classFileBuffer[currentOffset] & 0xFF) {
         case 'e': // enum_const_value
           return currentOffset + 5;
         case '@': // annotation_value
-          return readElementValues(null, currentOffset + 3, /* named= */ true, charBuffer);
+          return readElementValues(
+              null, currentOffset + 3, /* named= */ true, charBuffer, depth + 1);
         case '[': // array_value
-          return readElementValues(null, currentOffset + 1, /* named= */ false, charBuffer);
+          return readElementValues(
+              null, currentOffset + 1, /* named= */ false, charBuffer, depth + 1);
         default:
           return currentOffset + 3;
       }
@@ -3106,7 +3138,8 @@ public class ClassReader {
                 annotationVisitor.visitAnnotation(elementName, readUTF8(currentOffset, charBuffer)),
                 currentOffset + 2,
                 true,
-                charBuffer);
+                charBuffer,
+                depth + 1);
         break;
       case '[': // array_value
         int numValues = readUnsignedShort(currentOffset);
@@ -3116,7 +3149,8 @@ public class ClassReader {
               annotationVisitor.visitArray(elementName),
               currentOffset - 2,
               /* named= */ false,
-              charBuffer);
+              charBuffer,
+              depth + 1);
         }
         switch (classFileBuffer[currentOffset] & 0xFF) {
           case 'B':
@@ -3193,7 +3227,8 @@ public class ClassReader {
                     annotationVisitor.visitArray(elementName),
                     currentOffset - 2,
                     /* named= */ false,
-                    charBuffer);
+                    charBuffer,
+                    depth + 1);
             break;
         }
         break;
