@@ -132,4 +132,31 @@ class SimpleVerifierTest {
     assertTrue(simpleVerifier.isAssignableFrom(interfaceType, Type.getObjectType("[I")));
     assertFalse(simpleVerifier.isAssignableFrom(interfaceType, Type.INT_TYPE));
   }
+
+  @Test
+  void testIsAssignableFrom_invalidClassHierarchy() {
+    Type type1 = Type.getObjectType("C");
+    Type type2 = Type.getObjectType("D");
+    SimpleVerifier simpleVerifier =
+        new SimpleVerifier(
+            /* latest */ Opcodes.ASM10_EXPERIMENTAL,
+            type1,
+            Type.getObjectType("java/lang/Object"),
+            List.of(),
+            false) {
+
+          @Override
+          protected Type getSuperClass(final Type type) {
+            return type;
+          }
+
+          @Override
+          public boolean isAssignableFrom(final Type type1, final Type type2) {
+            return super.isAssignableFrom(type1, type2);
+          }
+        };
+
+    assertThrows(
+        TypeNotPresentException.class, () -> simpleVerifier.isAssignableFrom(type1, type2));
+  }
 }
