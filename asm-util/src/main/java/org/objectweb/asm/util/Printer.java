@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ConstantDynamic;
@@ -1203,20 +1204,17 @@ public abstract class Printer {
    * @param printWriter the print writer to be used.
    */
   public void print(final PrintWriter printWriter) {
-    printList(printWriter, text);
-  }
-
-  /**
-   * Prints the given string tree.
-   *
-   * @param printWriter the writer to be used to print the tree.
-   * @param list a string tree, i.e., a string list that can contain other string lists, and so on
-   *     recursively.
-   */
-  static void printList(final PrintWriter printWriter, final List<?> list) {
-    for (Object o : list) {
+    ArrayList<Object> stack = new ArrayList<>();
+    stack.add(text);
+    while (!stack.isEmpty()) {
+      Object o = stack.remove(stack.size() - 1);
       if (o instanceof List) {
-        printList(printWriter, (List<?>) o);
+        List<?> list = (List<?>) o;
+        int size = list.size();
+        ListIterator<?> iterator = list.listIterator(size);
+        while (size-- > 0) {
+          stack.add(iterator.previous());
+        }
       } else {
         printWriter.print(o.toString());
       }
