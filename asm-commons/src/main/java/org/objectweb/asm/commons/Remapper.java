@@ -237,6 +237,8 @@ public abstract class Remapper {
       Object[] remappedBootstrapMethodArguments = new Object[bootstrapMethodArgumentCount];
       for (int i = 0; i < bootstrapMethodArgumentCount; ++i) {
         bootstrapMethodArguments[i] = constantDynamic.getBootstrapMethodArgument(i);
+        // Potential recursion with ConstantDynamic arguments is OK because ClassReader rejects
+        // classes with too many nested ConstantDynamic.
         remappedBootstrapMethodArguments[i] = mapValue(bootstrapMethodArguments[i]);
       }
       if (api == 0) {
@@ -248,6 +250,7 @@ public abstract class Remapper {
       return new ConstantDynamic(
           name,
           mapDesc(descriptor),
+          // This recursive call cannot make any further ones (bootstrapMethod is a Handle).
           (Handle) mapValue(bootstrapMethod),
           remappedBootstrapMethodArguments);
     }

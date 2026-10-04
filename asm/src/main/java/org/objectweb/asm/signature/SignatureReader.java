@@ -43,9 +43,6 @@ public class SignatureReader {
   /** Maximum recursion level for {@link #parseType}. */
   private static final int MAX_DEPTH = 256;
 
-  /** Message for {@link LimitExceededException}. */
-  private static final String MAX_DEPTH_EXCEEDED = "Too many nested type arguments";
-
   /** The JVMS signature to be read. */
   private final String signatureValue;
 
@@ -165,7 +162,7 @@ public class SignatureReader {
       SignatureVisitor visitor, // DontCheck(FinalParameters): reduces recursive calls stack size
       final int depthLimit) {
     if (depthLimit == 0) {
-      throw new LimitExceededException(MAX_DEPTH_EXCEEDED);
+      throw new LimitExceededException("Too many nested type arguments");
     }
     while (true) {
       char currentChar = signature.charAt(offset++); // The signature character at 'offset'.

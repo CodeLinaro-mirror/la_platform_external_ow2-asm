@@ -1,0 +1,464 @@
+// class version 55.0 (55)
+// access flags 0x21
+public class jdk11/LargeStructures {
+
+
+  // access flags 0x8
+  static Ljava/lang/Object; F
+
+  // access flags 0x8
+  static Ljava/lang/Object; G
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC const_126 : Ljava/lang/Object; [
+      // handle kind 0x6 : INVOKESTATIC
+      jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+      // arguments:
+      // constant dynamic: 
+      const_125 : Ljava/lang/Object; [
+        // handle kind 0x6 : INVOKESTATIC
+        jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+        // arguments:
+        // constant dynamic: 
+        const_124 : Ljava/lang/Object; [
+          // handle kind 0x6 : INVOKESTATIC
+          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+          // arguments:
+          // constant dynamic: 
+          const_123 : Ljava/lang/Object; [
+            // handle kind 0x6 : INVOKESTATIC
+            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+            // arguments:
+            // constant dynamic: 
+            const_122 : Ljava/lang/Object; [
+              // handle kind 0x6 : INVOKESTATIC
+              jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+              // arguments:
+              // constant dynamic: 
+              const_121 : Ljava/lang/Object; [
+                // handle kind 0x6 : INVOKESTATIC
+                jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                // arguments:
+                // constant dynamic: 
+                const_120 : Ljava/lang/Object; [
+                  // handle kind 0x6 : INVOKESTATIC
+                  jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                  // arguments:
+                  // constant dynamic: 
+                  const_119 : Ljava/lang/Object; [
+                    // handle kind 0x6 : INVOKESTATIC
+                    jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                    // arguments:
+                    // constant dynamic: 
+                    const_118 : Ljava/lang/Object; [
+                      // handle kind 0x6 : INVOKESTATIC
+                      jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                      // arguments:
+                      // constant dynamic: 
+                      const_117 : Ljava/lang/Object; [
+                        // handle kind 0x6 : INVOKESTATIC
+                        jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                        // arguments:
+                        // constant dynamic: 
+                        const_116 : Ljava/lang/Object; [
+                          // handle kind 0x6 : INVOKESTATIC
+                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                          // arguments:
+                          // constant dynamic: 
+                          const_115 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            // constant dynamic: 
+                            const_114 : Ljava/lang/Object; [
+                              // handle kind 0x6 : INVOKESTATIC
+                              jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                              // arguments:
+                              // constant dynamic: 
+                              const_113 : Ljava/lang/Object; [
+                                // handle kind 0x6 : INVOKESTATIC
+                                jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                // arguments:
+                                // constant dynamic: 
+                                const_112 : Ljava/lang/Object; [
+                                  // handle kind 0x6 : INVOKESTATIC
+                                  jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                  // arguments:
+                                  // constant dynamic: 
+                                  const_111 : Ljava/lang/Object; [
+                                    // handle kind 0x6 : INVOKESTATIC
+                                    jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                    // arguments:
+                                    // constant dynamic: 
+                                    const_110 : Ljava/lang/Object; [
+                                      // handle kind 0x6 : INVOKESTATIC
+                                      jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                      // arguments:
+                                      // constant dynamic: 
+                                      const_109 : Ljava/lang/Object; [
+                                        // handle kind 0x6 : INVOKESTATIC
+                                        jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                        // arguments:
+                                        // constant dynamic: 
+                                        const_108 : Ljava/lang/Object; [
+                                          // handle kind 0x6 : INVOKESTATIC
+                                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                          // arguments:
+                                          // constant dynamic: 
+                                          const_107 : Ljava/lang/Object; [
+                                            // handle kind 0x6 : INVOKESTATIC
+                                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                            // arguments:
+                                            // constant dynamic: 
+                                            const_106 : Ljava/lang/Object; [
+                                              // handle kind 0x6 : INVOKESTATIC
+                                              jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                              // arguments:
+                                              // constant dynamic: 
+                                              const_105 : Ljava/lang/Object; [
+                                                // handle kind 0x6 : INVOKESTATIC
+                                                jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                // arguments:
+                                                // constant dynamic: 
+                                                const_104 : Ljava/lang/Object; [
+                                                  // handle kind 0x6 : INVOKESTATIC
+                                                  jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                  // arguments:
+                                                  // constant dynamic: 
+                                                  const_103 : Ljava/lang/Object; [
+                                                    // handle kind 0x6 : INVOKESTATIC
+                                                    jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                    // arguments:
+                                                    // constant dynamic: 
+                                                    const_102 : Ljava/lang/Object; [
+                                                      // handle kind 0x6 : INVOKESTATIC
+                                                      jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                      // arguments:
+                                                      // constant dynamic: 
+                                                      const_101 : Ljava/lang/Object; [
+                                                        // handle kind 0x6 : INVOKESTATIC
+                                                        jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                        // arguments:
+                                                        // constant dynamic: 
+                                                        const_100 : Ljava/lang/Object; [
+                                                          // handle kind 0x6 : INVOKESTATIC
+                                                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                          // arguments:
+                                                          // constant dynamic: 
+                                                          const_99 : Ljava/lang/Object; [
+                                                            // handle kind 0x6 : INVOKESTATIC
+                                                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                            // arguments:
+                                                            // constant dynamic: 
+                                                            const_98 : Ljava/lang/Object; [
+                                                              // handle kind 0x6 : INVOKESTATIC
+                                                              jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                              // arguments:
+                                                              // constant dynamic: 
+                                                              const_97 : Ljava/lang/Object; [
+                                                                // handle kind 0x6 : INVOKESTATIC
+                                                                jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                                // arguments:
+                                                                // constant dynamic: 
+                                                                const_96 : Ljava/lang/Object; [
+                                                                  // handle kind 0x6 : INVOKESTATIC
+                                                                  jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                                  // arguments:
+                                                                  // constant dynamic: 
+                                                                  const_95 : Ljava/lang/Object; [
+                                                                    // handle kind 0x6 : INVOKESTATIC
+                                                                    jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                                    // arguments:
+                                                                    // constant dynamic: 
+                                                                    const_94 : Ljava/lang/Object; [
+                                                                      // handle kind 0x6 : INVOKESTATIC
+                                                                      jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                                      // arguments:
+                                                                      // constant dynamic: 
+                                                                      const_93 : Ljava/lang/Object; [
+                                                                        // handle kind 0x6 : INVOKESTATIC
+                                                                        jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                                        // arguments:
+                                                                        // constant dynamic: 
+                                                                        const_92 : Ljava/lang/Object; [
+                                                                          // handle kind 0x6 : INVOKESTATIC
+                                                                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                                                                          // arguments:
+                                                                          // constant dynamic: 
+                                                                          ...
+    PUTSTATIC jdk11/LargeStructures.F : Ljava/lang/Object;
+    LDC const_11 : Ljava/lang/Object; [
+      // handle kind 0x6 : INVOKESTATIC
+      jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+      // arguments:
+      // constant dynamic: 
+      const_10 : Ljava/lang/Object; [
+        // handle kind 0x6 : INVOKESTATIC
+        jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+        // arguments:
+        // constant dynamic: 
+        const_9 : Ljava/lang/Object; [
+          // handle kind 0x6 : INVOKESTATIC
+          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+          // arguments:
+          // constant dynamic: 
+          const_8 : Ljava/lang/Object; [
+            // handle kind 0x6 : INVOKESTATIC
+            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+            // arguments:
+            // constant dynamic: 
+            const_7 : Ljava/lang/Object; [
+              // handle kind 0x6 : INVOKESTATIC
+              jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+              // arguments:
+              // constant dynamic: 
+              const_6 : Ljava/lang/Object; [
+                // handle kind 0x6 : INVOKESTATIC
+                jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                // arguments:
+                // constant dynamic: 
+                const_5 : Ljava/lang/Object; [
+                  // handle kind 0x6 : INVOKESTATIC
+                  jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                  // arguments:
+                  // constant dynamic: 
+                  const_4 : Ljava/lang/Object; [
+                    // handle kind 0x6 : INVOKESTATIC
+                    jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                    // arguments:
+                    // constant dynamic: 
+                    const_3 : Ljava/lang/Object; [
+                      // handle kind 0x6 : INVOKESTATIC
+                      jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                      // arguments:
+                      // constant dynamic: 
+                      const_2 : Ljava/lang/Object; [
+                        // handle kind 0x6 : INVOKESTATIC
+                        jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                        // arguments:
+                        // constant dynamic: 
+                        const_1 : Ljava/lang/Object; [
+                          // handle kind 0x6 : INVOKESTATIC
+                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                          // arguments:
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ], 
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ]
+                        ], 
+                        // constant dynamic: 
+                        const_1 : Ljava/lang/Object; [
+                          // handle kind 0x6 : INVOKESTATIC
+                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                          // arguments:
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ], 
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ]
+                        ]
+                      ], 
+                      // constant dynamic: 
+                      const_2 : Ljava/lang/Object; [
+                        // handle kind 0x6 : INVOKESTATIC
+                        jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                        // arguments:
+                        // constant dynamic: 
+                        const_1 : Ljava/lang/Object; [
+                          // handle kind 0x6 : INVOKESTATIC
+                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                          // arguments:
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ], 
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ]
+                        ], 
+                        // constant dynamic: 
+                        const_1 : Ljava/lang/Object; [
+                          // handle kind 0x6 : INVOKESTATIC
+                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                          // arguments:
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ], 
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ]
+                        ]
+                      ]
+                    ], 
+                    // constant dynamic: 
+                    const_3 : Ljava/lang/Object; [
+                      // handle kind 0x6 : INVOKESTATIC
+                      jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                      // arguments:
+                      // constant dynamic: 
+                      const_2 : Ljava/lang/Object; [
+                        // handle kind 0x6 : INVOKESTATIC
+                        jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                        // arguments:
+                        // constant dynamic: 
+                        const_1 : Ljava/lang/Object; [
+                          // handle kind 0x6 : INVOKESTATIC
+                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                          // arguments:
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ], 
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ]
+                        ], 
+                        // constant dynamic: 
+                        const_1 : Ljava/lang/Object; [
+                          // handle kind 0x6 : INVOKESTATIC
+                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                          // arguments:
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ], 
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ]
+                        ]
+                      ], 
+                      // constant dynamic: 
+                      const_2 : Ljava/lang/Object; [
+                        // handle kind 0x6 : INVOKESTATIC
+                        jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                        // arguments:
+                        // constant dynamic: 
+                        const_1 : Ljava/lang/Object; [
+                          // handle kind 0x6 : INVOKESTATIC
+                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                          // arguments:
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ], 
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ]
+                        ], 
+                        // constant dynamic: 
+                        const_1 : Ljava/lang/Object; [
+                          // handle kind 0x6 : INVOKESTATIC
+                          jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                          // arguments:
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ], 
+                          // constant dynamic: 
+                          const_0 : Ljava/lang/Object; [
+                            // handle kind 0x6 : INVOKESTATIC
+                            jdk11/LargeStructures.bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+                            // arguments:
+                            0, 
+                            0
+                          ]
+                        ]
+                      ]
+                    ]
+                  ], 
+                  // constant dynamic: 
+                  ...
+    PUTSTATIC jdk11/LargeStructures.G : Ljava/lang/Object;
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x9
+  public static bootstrapMethod(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    ACONST_NULL
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 5
+}

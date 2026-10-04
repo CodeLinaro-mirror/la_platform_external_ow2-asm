@@ -83,6 +83,10 @@ public class Textifier extends Printer {
   private static final String DEPRECATED = "// DEPRECATED\n";
   private static final String RECORD = "// RECORD\n";
   private static final String INVISIBLE = " // invisible\n";
+  private static final String ELLIPSIS = "...";
+
+  /** The "stop length" for ConstantDynamic and InvokeDynamic constants textual representations. */
+  private static final int CONSTANT_DYNAMIC_STOP_LENGTH = 16384;
 
   private static final List<String> FRAME_TYPES =
       Collections.unmodifiableList(Arrays.asList("T", "I", "F", "D", "J", "N", "U"));
@@ -938,13 +942,16 @@ public class Textifier extends Printer {
       final String descriptor,
       final Handle bootstrapMethodHandle,
       final Object... bootstrapMethodArguments) {
+    final int stopLength = stringBuilder.length() + CONSTANT_DYNAMIC_STOP_LENGTH;
     stringBuilder.setLength(0);
     stringBuilder.append(tab2).append("INVOKEDYNAMIC").append(' ').append(name);
     appendDescriptor(METHOD_DESCRIPTOR, descriptor);
     stringBuilder.append(" [").append('\n').append(tab3);
     appendHandle(bootstrapMethodHandle, tab3);
     stringBuilder.append('\n').append(tab3);
-    appendBoostrapMethodArgs(bootstrapMethodArguments, tab3);
+    if (!appendBoostrapMethodArgs(bootstrapMethodArguments, tab3, stopLength)) {
+      stringBuilder.append(ELLIPSIS);
+    }
     stringBuilder.append('\n').append(tab2).append("]\n");
     text.add(stringBuilder.toString());
   }
@@ -972,7 +979,10 @@ public class Textifier extends Printer {
     stringBuilder.setLength(0);
     if (value instanceof ConstantDynamic) {
       stringBuilder.append(tab2).append("LDC ");
-      appendConstantDynamic((ConstantDynamic) value, tab2);
+      if (!appendConstantDynamic(
+          (ConstantDynamic) value, tab2, stringBuilder.length() + CONSTANT_DYNAMIC_STOP_LENGTH)) {
+        stringBuilder.append(ELLIPSIS);
+      }
     } else if (value instanceof Handle) {
       stringBuilder.append(tab2);
       appendHandle((Handle) value, tab2 + "LDC ");
@@ -1308,12 +1318,19 @@ public class Textifier extends Printer {
   }
 
   /**
-   * Append the contents of a {@link ConstantDynamic}.
+   * Appends the contents of a {@link ConstantDynamic}.
    *
    * @param condy the constant dynamic to append
    * @param condyIndent the indent to use for newlines.
+   * @param stopLength stop appending content when the {@link #stringBuilder} length becomes greater
+   *     than or equal to this.
+   * @return whether the full content was appended or not.
    */
-  private void appendConstantDynamic(final ConstantDynamic condy, final String condyIndent) {
+  private boolean appendConstantDynamic(
+      final ConstantDynamic condy, final String condyIndent, final int stopLength) {
+    if (stringBuilder.length() >= stopLength) {
+      return false;
+    }
     stringBuilder
         .append(condy.getName())
         .append(" : ")
@@ -1327,8 +1344,14 @@ public class Textifier extends Printer {
     for (int i = 0; i < bsmArgs.length; i++) {
       bsmArgs[i] = condy.getBootstrapMethodArgument(i);
     }
-    appendBoostrapMethodArgs(bsmArgs, condyIndent + tab);
+    // Potential recursion with ConstantDynamic arguments is OK because ClassReader rejects
+    // classes with too many nested ConstantDynamic, and because we also restrict the length of the
+    // textual representation.
+    if (!appendBoostrapMethodArgs(bsmArgs, condyIndent + tab, stopLength)) {
+      return false;
+    }
     stringBuilder.append('\n').append(condyIndent).append(']');
+    return true;
   }
 
   /**
@@ -1336,8 +1359,12 @@ public class Textifier extends Printer {
    *
    * @param bsmArgs the bootstrap method arguments.
    * @param argIndent the indent to use for newlines.
+   * @param stopLength stop appending content when the {@link #stringBuilder} length becomes greater
+   *     than or equal to this.
+   * @return whether the full content was appended or not.
    */
-  private void appendBoostrapMethodArgs(final Object[] bsmArgs, final String argIndent) {
+  private boolean appendBoostrapMethodArgs(
+      final Object[] bsmArgs, final String argIndent, final int stopLength) {
     stringBuilder.append("// arguments:");
     if (bsmArgs.length == 0) {
       stringBuilder.append(" none");
@@ -1359,12 +1386,15 @@ public class Textifier extends Printer {
           appendHandle((Handle) arg, argIndent);
         } else if (arg instanceof ConstantDynamic) {
           stringBuilder.append("// constant dynamic: ").append('\n').append(argIndent);
-          appendConstantDynamic((ConstantDynamic) arg, argIndent);
+          if (!appendConstantDynamic((ConstantDynamic) arg, argIndent, stopLength)) {
+            return false;
+          }
         } else {
           appendConstant(arg);
         }
       }
     }
+    return true;
   }
 
   /**
