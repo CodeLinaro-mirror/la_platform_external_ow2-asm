@@ -194,6 +194,7 @@ public abstract class AsmTest {
     JDK11_ALL_INSTRUCTIONS("jdk11.AllInstructions", JdkVersion.JDK11),
     JDK11_ALL_STRUCTURES("jdk11.AllStructures", JdkVersion.JDK11),
     JDK11_ALL_STRUCTURES_NESTED("jdk11.AllStructures$Nested", JdkVersion.JDK11),
+    JDK11_LARGE_STRUCTURES("jdk11.LargeStructures", JdkVersion.JDK11),
     JDK14_ALL_STRUCTURES_RECORD("jdk14.AllStructures$RecordSubType", JdkVersion.JDK14),
     JDK14_ALL_STRUCTURES_EMPTY_RECORD("jdk14.AllStructures$EmptyRecord", JdkVersion.JDK14),
     JDK15_ALL_STRUCTURES("jdk15.AllStructures", JdkVersion.JDK15);

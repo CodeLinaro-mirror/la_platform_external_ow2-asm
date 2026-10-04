@@ -353,11 +353,12 @@ class ClassReaderTest extends AsmTest implements Opcodes {
 
     // jdk8.ArtificialStructures contains structures which require ASM5, but only inside the method
     // code. Here we skip the code, so this class can be read with ASM4. Likewise for
-    // jdk8.AllLambdas and jdk11.AllInstructions.
+    // jdk8.AllLambdas, jdk11.AllInstructions and jdk11.LargeStructures.
     if (classParameter.isMoreRecentThan(apiParameter)
         && classParameter != PrecompiledClass.JDK8_ARTIFICIAL_STRUCTURES
         && classParameter != PrecompiledClass.JDK8_ALL_LAMBDAS
-        && classParameter != PrecompiledClass.JDK11_ALL_INSTRUCTIONS) {
+        && classParameter != PrecompiledClass.JDK11_ALL_INSTRUCTIONS
+        && classParameter != PrecompiledClass.JDK11_LARGE_STRUCTURES) {
       Exception exception = assertThrows(UnsupportedOperationException.class, accept);
       assertTrue(exception.getMessage().matches(UNSUPPORTED_OPERATION_MESSAGE_PATTERN));
     } else {
@@ -440,7 +441,6 @@ class ClassReaderTest extends AsmTest implements Opcodes {
     assertDoesNotThrow(accept);
   }
 
-  @ParameterizedTest
   @ValueSource(ints = {255, 256})
   void testAccept_emptyVisitor_deepAnnotations(final int depth) {
     ClassWriter classWriter = new ClassWriter(0);
@@ -466,6 +466,100 @@ class ClassReaderTest extends AsmTest implements Opcodes {
     } else {
       LimitExceededException e = assertThrows(LimitExceededException.class, accept);
       assertEquals("Too many nested annotations", e.getMessage());
+    }
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {127, 128})
+  void testAccept_emptyVisitor_deepConstantDynamic(final int depth) {
+    final String name = "LargeConstantDynamic";
+    ClassWriter classWriter = new ClassWriter(0);
+    classWriter.visit(V11, ACC_PUBLIC + ACC_SUPER, name, null, "java/lang/Object", null);
+    // Create a tree of ConstantDynamic with "depth" nodes (each with at most one child).
+    Handle handle =
+        new Handle(
+            H_INVOKESTATIC,
+            name,
+            "bootstrapMethod",
+            "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;"
+                + "Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+            false);
+    Object constantDynamic = 0;
+    for (int i = 0; i < depth; i++) {
+      constantDynamic =
+          new ConstantDynamic("const_" + i, "Ljava/lang/Object;", handle, constantDynamic);
+    }
+    // Add a static field containing this constant (initialized with a static initializer method).
+    classWriter.visitField(ACC_STATIC, "F", "Ljava/lang/Object;", null, null).visitEnd();
+    MethodVisitor methodVisitor =
+        classWriter.visitMethod(ACC_STATIC, "<clinit>", "()V", null, null);
+    methodVisitor.visitCode();
+    methodVisitor.visitLdcInsn(constantDynamic);
+    methodVisitor.visitFieldInsn(PUTSTATIC, name, "F", "Ljava/lang/Object;");
+    methodVisitor.visitInsn(RETURN);
+    methodVisitor.visitMaxs(1, 0);
+    methodVisitor.visitEnd();
+    ClassReader classReader = new ClassReader(classWriter.toByteArray());
+
+    Executable accept =
+        () -> classReader.accept(new EmptyClassVisitor(/* latest */ Opcodes.ASM10_EXPERIMENTAL), 0);
+
+    if (depth < 128) {
+      assertDoesNotThrow(accept);
+    } else {
+      LimitExceededException e = assertThrows(LimitExceededException.class, accept);
+      assertEquals("Too many nested ConstantDynamic", e.getMessage());
+    }
+  }
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  void testAccept_emptyVisitor_largeConstantDynamic(final boolean tooLarge) {
+    final String name = "LargeConstantDynamic";
+    ClassWriter classWriter = new ClassWriter(0);
+    classWriter.visit(V11, ACC_PUBLIC + ACC_SUPER, name, null, "java/lang/Object", null);
+    // Create a DAG of ConstantDynamic values with 12 levels, where each constant as two identical
+    // references to the next one. Viewed as a tree, this gives 2^12 - 1  = 4095 constants.
+    Handle handle =
+        new Handle(
+            H_INVOKESTATIC,
+            name,
+            "bootstrapMethod",
+            "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;"
+                + "Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            false);
+    Object constantDynamic = 0;
+    for (int i = 0; i < 12; i++) {
+      // Two identical arguments referencing the previous constant (DAG).
+      constantDynamic =
+          new ConstantDynamic(
+              "const_" + i, "Ljava/lang/Object;", handle, constantDynamic, constantDynamic);
+    }
+    if (tooLarge) {
+      // Add one more constant, for a total of 4096 nodes.
+      constantDynamic =
+          new ConstantDynamic("const", "Ljava/lang/Object;", handle, constantDynamic, 0);
+    }
+    // Add a static field containing this constant (initialized with a static initializer method).
+    classWriter.visitField(ACC_STATIC, "F", "Ljava/lang/Object;", null, null).visitEnd();
+    MethodVisitor methodVisitor =
+        classWriter.visitMethod(ACC_STATIC, "<clinit>", "()V", null, null);
+    methodVisitor.visitCode();
+    methodVisitor.visitLdcInsn(constantDynamic);
+    methodVisitor.visitFieldInsn(PUTSTATIC, name, "F", "Ljava/lang/Object;");
+    methodVisitor.visitInsn(RETURN);
+    methodVisitor.visitMaxs(1, 0);
+    methodVisitor.visitEnd();
+    ClassReader classReader = new ClassReader(classWriter.toByteArray());
+
+    Executable accept =
+        () -> classReader.accept(new EmptyClassVisitor(/* latest */ Opcodes.ASM10_EXPERIMENTAL), 0);
+
+    if (tooLarge) {
+      LimitExceededException e = assertThrows(LimitExceededException.class, accept);
+      assertEquals("Too many nested ConstantDynamic", e.getMessage());
+    } else {
+      assertDoesNotThrow(accept);
     }
   }
 

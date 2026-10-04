@@ -3852,10 +3852,14 @@ public class ClassReader {
    *     pool table.
    * @param charBuffer the buffer to be used to read the string. This buffer must be sufficiently
    *     large. It is not automatically resized.
+   * @param depthLimit the maximum allowed depth for further recursive calls.
    * @return the ConstantDynamic corresponding to the specified CONSTANT_Dynamic entry.
    */
   private ConstantDynamic readConstantDynamic(
-      final int constantPoolEntryIndex, final char[] charBuffer) {
+      final int constantPoolEntryIndex, final char[] charBuffer, final int depthLimit) {
+    if (depthLimit == 0) {
+      throw new LimitExceededException("Too many nested ConstantDynamic");
+    }
     ConstantDynamic constantDynamic = constantDynamicValues[constantPoolEntryIndex];
     if (constantDynamic != null) {
       return constantDynamic;
@@ -3865,15 +3869,34 @@ public class ClassReader {
     String name = readUTF8(nameAndTypeCpInfoOffset, charBuffer);
     String descriptor = readUTF8(nameAndTypeCpInfoOffset + 2, charBuffer);
     int bootstrapMethodOffset = bootstrapMethodOffsets[readUnsignedShort(cpInfoOffset)];
-    Handle handle = (Handle) readConst(readUnsignedShort(bootstrapMethodOffset), charBuffer);
+    int handleCpIndex = readUnsignedShort(bootstrapMethodOffset);
+    if (isConstantDynamic(handleCpIndex)) {
+      throw new ClassCastException("ConstantDynamic cannot be cast to Handle");
+    }
+    Handle handle = (Handle) readConst(handleCpIndex, charBuffer);
     Object[] bootstrapMethodArguments = new Object[readUnsignedShort(bootstrapMethodOffset + 2)];
     bootstrapMethodOffset += 4;
     for (int i = 0; i < bootstrapMethodArguments.length; i++) {
-      bootstrapMethodArguments[i] = readConst(readUnsignedShort(bootstrapMethodOffset), charBuffer);
+      int argumentCpIndex = readUnsignedShort(bootstrapMethodOffset);
+      bootstrapMethodArguments[i] =
+          isConstantDynamic(argumentCpIndex)
+              ? readConstantDynamic(argumentCpIndex, charBuffer, depthLimit - 1)
+              : readConst(argumentCpIndex, charBuffer);
       bootstrapMethodOffset += 2;
     }
     return constantDynamicValues[constantPoolEntryIndex] =
         new ConstantDynamic(name, descriptor, handle, bootstrapMethodArguments);
+  }
+
+  /**
+   * Returns whether the given constant pool entry is a CONSTANT_Dynamic entry.
+   *
+   * @param constantPoolEntryIndex the index of a constant pool entry in the class's constant pool.
+   * @return whether the given constant pool entry is a CONSTANT_Dynamic entry.
+   */
+  private boolean isConstantDynamic(final int constantPoolEntryIndex) {
+    int cpInfoOffset = cpInfoOffsets[constantPoolEntryIndex];
+    return classFileBuffer[cpInfoOffset - 1] == Symbol.CONSTANT_DYNAMIC_TAG;
   }
 
   /**
@@ -3918,7 +3941,12 @@ public class ClassReader {
             classFileBuffer[referenceCpInfoOffset - 1] == Symbol.CONSTANT_INTERFACE_METHODREF_TAG;
         return new Handle(referenceKind, owner, name, descriptor, isInterface);
       case Symbol.CONSTANT_DYNAMIC_TAG:
-        return readConstantDynamic(constantPoolEntryIndex, charBuffer);
+        ConstantDynamic result =
+            readConstantDynamic(constantPoolEntryIndex, charBuffer, /* depthLimit= */ 127);
+        if (result.subtractTreeSize(4096) <= 0) {
+          throw new LimitExceededException("Too many nested ConstantDynamic");
+        }
+        return result;
       default:
         throw new IllegalArgumentException();
     }

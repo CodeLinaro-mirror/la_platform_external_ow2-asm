@@ -154,6 +154,8 @@ public final class ConstantDynamic {
     return name.equals(constantDynamic.name)
         && descriptor.equals(constantDynamic.descriptor)
         && bootstrapMethod.equals(constantDynamic.bootstrapMethod)
+        // Potential recursion with ConstantDynamic arguments is OK because ClassReader rejects
+        // classes with too many nested ConstantDynamic.
         && Arrays.equals(bootstrapMethodArguments, constantDynamic.bootstrapMethodArguments);
   }
 
@@ -162,17 +164,79 @@ public final class ConstantDynamic {
     return name.hashCode()
         ^ Integer.rotateLeft(descriptor.hashCode(), 8)
         ^ Integer.rotateLeft(bootstrapMethod.hashCode(), 16)
+        // Potential recursion with ConstantDynamic arguments is OK because ClassReader rejects
+        // classes with too many nested ConstantDynamic.
         ^ Integer.rotateLeft(Arrays.hashCode(bootstrapMethodArguments), 24);
   }
 
   @Override
   public String toString() {
-    return name
-        + " : "
-        + descriptor
-        + ' '
-        + bootstrapMethod
-        + ' '
-        + Arrays.toString(bootstrapMethodArguments);
+    StringBuilder result = new StringBuilder();
+    if (!toString(result)) {
+      result.setLength(16381);
+      result.append("...");
+    }
+    return result.toString();
+  }
+
+  /**
+   * Appends a string representation of this object into the given builder. Stops when the string
+   * reaches or exceeds 16384 characters. The nested ConstantDynamic, if any, are viewed as a tree
+   * (and represented as such in the resulting string), even if they actually form a DAG.
+   *
+   * @param stringBuilder where to append the string representation.
+   * @return whether the full string representation fits in 16384 characters.
+   */
+  private boolean toString(final StringBuilder stringBuilder) {
+    if (stringBuilder.length() >= 16384) {
+      return false;
+    }
+    stringBuilder
+        .append(name)
+        .append(" : ")
+        .append(descriptor)
+        .append(' ')
+        .append(bootstrapMethod)
+        .append(' ');
+    for (Object argument : bootstrapMethodArguments) {
+      if (argument instanceof ConstantDynamic) {
+        // Recursion is OK because ClassReader rejects classes with too many nested ConstantDynamic.
+        // Still, even with these limits, the string representation can be large and it is better to
+        // limit it too.
+        if (!((ConstantDynamic) argument).toString(stringBuilder)) {
+          return false;
+        }
+      } else {
+        stringBuilder.append(argument);
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Returns the given value minus the total number of ConstantDynamic objects in this constant and
+   * its bootstrap method arguments (recursively, and viewing the structure as a tree). Stops as
+   * soon as the total number found so far is equal to the given value (and returns 0).
+   *
+   * @param size the maximum number of ConstantDynamic objects to visit (the same object can be
+   *     visited several times in case a DAG, or if there is a cycle).
+   * @return size minus the number of nested ConstantDynamic objects found, clamped to 0.
+   */
+  // DontCheck(FinalParameters): reduces recursive calls stack size
+  int subtractTreeSize(int size) {
+    // Count this ConstantDynamic.
+    if (--size <= 0) {
+      return 0;
+    }
+    for (Object o : bootstrapMethodArguments) {
+      if (o instanceof ConstantDynamic) {
+        // Recursion is OK because it is restricted by 'size'.
+        size = ((ConstantDynamic) o).subtractTreeSize(size);
+        if (size <= 0) {
+          return 0;
+        }
+      }
+    }
+    return size;
   }
 }

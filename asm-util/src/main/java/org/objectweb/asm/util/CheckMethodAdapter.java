@@ -1254,9 +1254,12 @@ public class CheckMethodAdapter extends MethodVisitor {
       ConstantDynamic constantDynamic = (ConstantDynamic) value;
       checkMethodIdentifier(this.version, constantDynamic.getName(), "constant dynamic name");
       checkDescriptor(this.version, constantDynamic.getDescriptor(), false);
+      // This recursive call cannot make any further ones (constant is a Handle).
       checkLdcConstant(constantDynamic.getBootstrapMethod());
       int bootstrapMethodArgumentCount = constantDynamic.getBootstrapMethodArgumentCount();
       for (int i = 0; i < bootstrapMethodArgumentCount; ++i) {
+        // Potential recursion with ConstantDynamic arguments is OK because ClassReader rejects
+        // classes with too many nested ConstantDynamic.
         checkLdcConstant(constantDynamic.getBootstrapMethodArgument(i));
       }
     } else {

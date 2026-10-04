@@ -29,6 +29,7 @@ package org.objectweb.asm.util;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -130,6 +131,15 @@ public class ASMifier extends Printer {
   /** The name of the Label variables in the produced code. */
   protected Map<Label, String> labelNames;
 
+  /** List of local variables declarations. */
+  private List<String> localVariables;
+
+  /** For each Handle, the name of a local variable with this value. */
+  private Map<Handle, String> handleVariables;
+
+  /** For each ConstantDynamic, the name of a local variable with this value. */
+  private Map<ConstantDynamic, String> constantDynamicVariables;
+
   /**
    * Constructs a new {@link ASMifier}. <i>Subclasses must not use this constructor</i>. Instead,
    * they must use the {@link #ASMifier(int, String, int)} version.
@@ -228,7 +238,12 @@ public class ASMifier extends Printer {
     text.add("FieldVisitor fieldVisitor;\n");
     text.add("RecordComponentVisitor recordComponentVisitor;\n");
     text.add("MethodVisitor methodVisitor;\n");
-    text.add("AnnotationVisitor annotationVisitor0;\n\n");
+    text.add("AnnotationVisitor annotationVisitor0;\n");
+    localVariables = new ArrayList<>();
+    handleVariables = new HashMap<>();
+    constantDynamicVariables = new HashMap<>();
+    text.add(localVariables);
+    text.add("\n");
 
     stringBuilder.setLength(0);
     stringBuilder.append("classWriter.visit(");
@@ -283,7 +298,7 @@ public class ASMifier extends Printer {
     appendConstant(version);
     stringBuilder.append(END_PARAMETERS);
     text.add(stringBuilder.toString());
-    ASMifier asmifier = createASMifier("moduleVisitor", 0);
+    ASMifier asmifier = newAsmifier("moduleVisitor", 0);
     text.add(asmifier.getText());
     text.add("}\n");
     return asmifier;
@@ -373,7 +388,7 @@ public class ASMifier extends Printer {
     appendConstant(signature);
     stringBuilder.append(");\n");
     text.add(stringBuilder.toString());
-    ASMifier asmifier = createASMifier("recordComponentVisitor", 0);
+    ASMifier asmifier = newAsmifier("recordComponentVisitor", 0);
     text.add(asmifier.getText());
     text.add("}\n");
     return asmifier;
@@ -399,7 +414,7 @@ public class ASMifier extends Printer {
     appendConstant(value);
     stringBuilder.append(");\n");
     text.add(stringBuilder.toString());
-    ASMifier asmifier = createASMifier("fieldVisitor", 0);
+    ASMifier asmifier = newAsmifier("fieldVisitor", 0);
     text.add(asmifier.getText());
     text.add("}\n");
     return asmifier;
@@ -434,7 +449,7 @@ public class ASMifier extends Printer {
     }
     stringBuilder.append(");\n");
     text.add(stringBuilder.toString());
-    ASMifier asmifier = createASMifier("methodVisitor", 0);
+    ASMifier asmifier = newAsmifier("methodVisitor", 0);
     text.add(asmifier.getText());
     text.add("}\n");
     return asmifier;
@@ -583,7 +598,7 @@ public class ASMifier extends Printer {
     appendConstant(descriptor);
     stringBuilder.append(");\n");
     text.add(stringBuilder.toString());
-    ASMifier asmifier = createASMifier(ANNOTATION_VISITOR, id + 1);
+    ASMifier asmifier = newAsmifier(ANNOTATION_VISITOR, id + 1);
     text.add(asmifier.getText());
     text.add("}\n");
     return asmifier;
@@ -601,7 +616,7 @@ public class ASMifier extends Printer {
     appendConstant(name);
     stringBuilder.append(");\n");
     text.add(stringBuilder.toString());
-    ASMifier asmifier = createASMifier(ANNOTATION_VISITOR, id + 1);
+    ASMifier asmifier = newAsmifier(ANNOTATION_VISITOR, id + 1);
     text.add(asmifier.getText());
     text.add("}\n");
     return asmifier;
@@ -691,7 +706,7 @@ public class ASMifier extends Printer {
         .append(name)
         .append(".visitAnnotationDefault();\n");
     text.add(stringBuilder.toString());
-    ASMifier asmifier = createASMifier(ANNOTATION_VISITOR, 0);
+    ASMifier asmifier = newAsmifier(ANNOTATION_VISITOR, 0);
     text.add(asmifier.getText());
     text.add("}\n");
     return asmifier;
@@ -736,7 +751,7 @@ public class ASMifier extends Printer {
     appendConstant(descriptor);
     stringBuilder.append(", ").append(visible).append(");\n");
     text.add(stringBuilder.toString());
-    ASMifier asmifier = createASMifier(ANNOTATION_VISITOR, 0);
+    ASMifier asmifier = newAsmifier(ANNOTATION_VISITOR, 0);
     text.add(asmifier.getText());
     text.add("}\n");
     return asmifier;
@@ -1106,7 +1121,7 @@ public class ASMifier extends Printer {
     appendConstant(descriptor);
     stringBuilder.append(", ").append(visible).append(");\n");
     text.add(stringBuilder.toString());
-    ASMifier asmifier = createASMifier(ANNOTATION_VISITOR, 0);
+    ASMifier asmifier = newAsmifier(ANNOTATION_VISITOR, 0);
     text.add(asmifier.getText());
     text.add("}\n");
     return asmifier;
@@ -1161,7 +1176,7 @@ public class ASMifier extends Printer {
     appendConstant(descriptor);
     stringBuilder.append(", ").append(visible).append(");\n");
     text.add(stringBuilder.toString());
-    ASMifier asmifier = createASMifier(ANNOTATION_VISITOR, 0);
+    ASMifier asmifier = newAsmifier(ANNOTATION_VISITOR, 0);
     text.add(asmifier.getText());
     text.add("}\n");
     return asmifier;
@@ -1220,7 +1235,7 @@ public class ASMifier extends Printer {
     appendConstant(descriptor);
     stringBuilder.append(", ").append(visible).append(");\n");
     text.add(stringBuilder.toString());
-    ASMifier asmifier = createASMifier(ANNOTATION_VISITOR, 0);
+    ASMifier asmifier = newAsmifier(ANNOTATION_VISITOR, 0);
     text.add(asmifier.getText());
     text.add("}\n");
     return asmifier;
@@ -1267,6 +1282,21 @@ public class ASMifier extends Printer {
   protected ASMifier createASMifier(
       final String visitorVariableName, final int annotationVisitorId) {
     return new ASMifier(api, visitorVariableName, annotationVisitorId);
+  }
+
+  /**
+   * Constructs and initializes a new {@link ASMifier}.
+   *
+   * @param visitorVariableName the name of the visitor variable in the produced code.
+   * @param annotationVisitorId identifier of the annotation visitor variable in the produced code.
+   * @return a new {@link ASMifier}.
+   */
+  private ASMifier newAsmifier(final String visitorVariableName, final int annotationVisitorId) {
+    ASMifier result = createASMifier(visitorVariableName, annotationVisitorId);
+    result.localVariables = localVariables;
+    result.handleVariables = handleVariables;
+    result.constantDynamicVariables = constantDynamicVariables;
+    return result;
   }
 
   /**
@@ -1439,6 +1469,17 @@ public class ASMifier extends Printer {
    *     or an array of primitive values. May be {@literal null}.
    */
   protected void appendConstant(final Object value) {
+    appendConstant(value, stringBuilder);
+  }
+
+  /**
+   * Appends a string representation of the given constant to {@link #stringBuilder}.
+   *
+   * @param value a {@link String}, {@link Type}, {@link Handle}, {@link Byte}, {@link Short},
+   *     {@link Character}, {@link Integer}, {@link Float}, {@link Long} or {@link Double} object,
+   *     or an array of primitive values. May be {@literal null}.
+   */
+  private void appendConstant(final Object value, final StringBuilder stringBuilder) {
     if (value == null) {
       stringBuilder.append("null");
     } else if (value instanceof String) {
@@ -1446,38 +1487,9 @@ public class ASMifier extends Printer {
     } else if (value instanceof Type) {
       stringBuilder.append("Type.getType(\"").append(((Type) value).getDescriptor()).append("\")");
     } else if (value instanceof Handle) {
-      stringBuilder.append("new Handle(");
-      Handle handle = (Handle) value;
-      stringBuilder
-          .append("Opcodes.")
-          .append(HANDLE_TAG[handle.getTag()])
-          .append(", \"")
-          .append(handle.getOwner())
-          .append(COMMA)
-          .append(handle.getName())
-          .append(COMMA)
-          .append(handle.getDesc())
-          .append("\", ")
-          .append(handle.isInterface())
-          .append(')');
+      stringBuilder.append(getHandleLocalVariable((Handle) value));
     } else if (value instanceof ConstantDynamic) {
-      stringBuilder.append("new ConstantDynamic(\"");
-      ConstantDynamic constantDynamic = (ConstantDynamic) value;
-      stringBuilder
-          .append(constantDynamic.getName())
-          .append(COMMA)
-          .append(constantDynamic.getDescriptor())
-          .append("\", ");
-      appendConstant(constantDynamic.getBootstrapMethod());
-      stringBuilder.append(NEW_OBJECT_ARRAY);
-      int bootstrapMethodArgumentCount = constantDynamic.getBootstrapMethodArgumentCount();
-      for (int i = 0; i < bootstrapMethodArgumentCount; ++i) {
-        appendConstant(constantDynamic.getBootstrapMethodArgument(i));
-        if (i != bootstrapMethodArgumentCount - 1) {
-          stringBuilder.append(", ");
-        }
-      }
-      stringBuilder.append("})");
+      stringBuilder.append(getConstantDynamicLocalVariable((ConstantDynamic) value));
     } else if (value instanceof Byte) {
       stringBuilder.append("Byte.valueOf((byte)").append(value).append(')');
     } else if (value instanceof Boolean) {
@@ -1621,5 +1633,73 @@ public class ASMifier extends Printer {
    */
   protected void appendLabel(final Label label) {
     stringBuilder.append(labelNames.get(label));
+  }
+
+  /**
+   * Returns the name of a local variable containing the given value. Creates one if necessary.
+   *
+   * @param handle a {@link Handle} value.
+   * @return the name of a local variable containing the given value.
+   */
+  private String getHandleLocalVariable(final Handle handle) {
+    String variableName = handleVariables.get(handle);
+    if (variableName == null) {
+      variableName = "handle" + handleVariables.size();
+      handleVariables.put(handle, variableName);
+      StringBuilder stringBuilder = new StringBuilder();
+      stringBuilder
+          .append("Handle ")
+          .append(variableName)
+          .append(" = new Handle(Opcodes.")
+          .append(HANDLE_TAG[handle.getTag()])
+          .append(", \"")
+          .append(handle.getOwner())
+          .append(COMMA)
+          .append(handle.getName())
+          .append(COMMA)
+          .append(handle.getDesc())
+          .append("\", ")
+          .append(handle.isInterface())
+          .append(");\n");
+      localVariables.add(stringBuilder.toString());
+    }
+    return variableName;
+  }
+
+  /**
+   * Returns the name of a local variable containing the given value. Creates one if necessary.
+   *
+   * @param constantDynamic a {@link ConstantDynamic} value.
+   * @return the name of a local variable containing the given value.
+   */
+  private String getConstantDynamicLocalVariable(final ConstantDynamic constantDynamic) {
+    String variableName = constantDynamicVariables.get(constantDynamic);
+    if (variableName == null) {
+      variableName = "constantDynamic" + constantDynamicVariables.size();
+      constantDynamicVariables.put(constantDynamic, variableName);
+      StringBuilder stringBuilder = new StringBuilder();
+      stringBuilder
+          .append("ConstantDynamic ")
+          .append(variableName)
+          .append(" = new ConstantDynamic(\"")
+          .append(constantDynamic.getName())
+          .append(COMMA)
+          .append(constantDynamic.getDescriptor())
+          .append("\", ")
+          .append(getHandleLocalVariable(constantDynamic.getBootstrapMethod()))
+          .append(NEW_OBJECT_ARRAY);
+      int bootstrapMethodArgumentCount = constantDynamic.getBootstrapMethodArgumentCount();
+      for (int i = 0; i < bootstrapMethodArgumentCount; ++i) {
+        // Potential recursion with ConstantDynamic arguments is OK because ClassReader rejects
+        // classes with too many nested ConstantDynamic.
+        appendConstant(constantDynamic.getBootstrapMethodArgument(i), stringBuilder);
+        if (i != bootstrapMethodArgumentCount - 1) {
+          stringBuilder.append(", ");
+        }
+      }
+      stringBuilder.append("});\n");
+      localVariables.add(stringBuilder.toString());
+    }
+    return variableName;
   }
 }
