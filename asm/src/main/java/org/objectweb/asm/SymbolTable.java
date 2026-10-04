@@ -1095,6 +1095,8 @@ final class SymbolTable {
     int numBootstrapArguments = bootstrapMethodArguments.length;
     int[] bootstrapMethodArgumentIndexes = new int[numBootstrapArguments];
     for (int i = 0; i < numBootstrapArguments; i++) {
+      // Potential recursion with ConstantDynamic arguments is OK because ClassReader rejects
+      // classes with too many nested ConstantDynamic.
       bootstrapMethodArgumentIndexes[i] = addConstant(bootstrapMethodArguments[i]).index;
     }
 

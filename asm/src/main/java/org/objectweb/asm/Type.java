@@ -313,6 +313,9 @@ public final class Type {
         int semiColumnOffset = methodDescriptor.indexOf(';', currentOffset);
         currentOffset = Math.max(currentOffset, semiColumnOffset + 1);
       }
+      if (methodDescriptor.charAt(currentArgumentTypeOffset) == '(') {
+        throw new IllegalArgumentException("Invalid descriptor: " + methodDescriptor);
+      }
       argumentTypes[currentArgumentTypeIndex++] =
           getTypeInternal(methodDescriptor, currentArgumentTypeOffset, currentOffset);
     }
@@ -384,6 +387,9 @@ public final class Type {
         int semiColumnOffset = methodDescriptor.indexOf(';', currentOffset);
         currentOffset = Math.max(currentOffset, semiColumnOffset + 1);
       }
+    }
+    if (methodDescriptor.charAt(currentOffset + 1) == '(') {
+      throw new IllegalArgumentException("Invalid descriptor: " + methodDescriptor);
     }
     return currentOffset + 1;
   }
@@ -461,6 +467,7 @@ public final class Type {
       case DOUBLE:
         return "double";
       case ARRAY:
+        // This recursive call cannot make any further ones (element type is not an array type).
         StringBuilder stringBuilder = new StringBuilder(getElementType().getClassName());
         for (int i = getDimensions(); i > 0; --i) {
           stringBuilder.append("[]");

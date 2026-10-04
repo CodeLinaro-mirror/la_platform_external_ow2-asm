@@ -917,6 +917,7 @@ public class InstructionAdapter extends MethodVisitor {
           methodVisitor.visitInsn(Opcodes.D2L);
         } else {
           methodVisitor.visitInsn(Opcodes.D2I);
+          // This recursive call cannot make any further ones (no recursive calls when from == INT).
           cast(methodVisitor, Type.INT_TYPE, to);
         }
       } else if (from == Type.FLOAT_TYPE) {
@@ -926,6 +927,7 @@ public class InstructionAdapter extends MethodVisitor {
           methodVisitor.visitInsn(Opcodes.F2L);
         } else {
           methodVisitor.visitInsn(Opcodes.F2I);
+          // This recursive call cannot make any further ones (no recursive calls when from == INT).
           cast(methodVisitor, Type.INT_TYPE, to);
         }
       } else if (from == Type.LONG_TYPE) {
@@ -935,6 +937,7 @@ public class InstructionAdapter extends MethodVisitor {
           methodVisitor.visitInsn(Opcodes.L2F);
         } else {
           methodVisitor.visitInsn(Opcodes.L2I);
+          // This recursive call cannot make any further ones (no recursive calls when from == INT).
           cast(methodVisitor, Type.INT_TYPE, to);
         }
       } else {
