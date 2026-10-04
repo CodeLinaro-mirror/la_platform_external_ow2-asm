@@ -1,4 +1,4 @@
-// class version 58.65535 (-65478)
+// class version 58.0 (58)
 // RECORD
 // access flags 0x10030
 final class jdk14/AllStructures$EmptyRecord extends java/lang/Record {

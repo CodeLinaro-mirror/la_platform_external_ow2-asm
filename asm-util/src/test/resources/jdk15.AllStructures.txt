@@ -1,4 +1,4 @@
-// class version 59.65535 (-65477)
+// class version 59.0 (59)
 // access flags 0x601
 public abstract interface jdk15/AllStructures {
 
