@@ -166,6 +166,7 @@ public class SimpleVerifier extends BasicVerifier {
     BasicValue value = super.newValue(type);
     if (BasicValue.REFERENCE_VALUE.equals(value)) {
       if (isArray) {
+        // This recursive call cannot make any further ones (element type is not an array type).
         value = newValue(type.getElementType());
         StringBuilder descriptor = new StringBuilder();
         for (int i = 0; i < type.getDimensions(); ++i) {

@@ -121,6 +121,7 @@ public abstract class Remapper {
         for (int i = 0; i < type.getDimensions(); ++i) {
           remappedDescriptor.append('[');
         }
+        // This recursive call cannot make any further ones (element type is not an array type).
         remappedDescriptor.append(mapType(type.getElementType()).getDescriptor());
         return Type.getType(remappedDescriptor.toString());
       case Type.OBJECT:
@@ -186,12 +187,14 @@ public abstract class Remapper {
 
     StringBuilder stringBuilder = new StringBuilder("(");
     for (Type argumentType : Type.getArgumentTypes(methodDescriptor)) {
+      // This recursive call cannot make any further ones (argument type is not a method type).
       stringBuilder.append(mapType(argumentType).getDescriptor());
     }
     Type returnType = Type.getReturnType(methodDescriptor);
     if (returnType == Type.VOID_TYPE) {
       stringBuilder.append(")V");
     } else {
+      // This recursive call cannot make any further ones (return type is not a method type).
       stringBuilder.append(')').append(mapType(returnType).getDescriptor());
     }
     return stringBuilder.toString();

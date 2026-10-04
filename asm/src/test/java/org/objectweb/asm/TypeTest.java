@@ -241,11 +241,25 @@ class TypeTest implements Opcodes {
   }
 
   @Test
+  void testGetArgumentTypes_invalidDescriptor() {
+    Executable getArgumentTypes = () -> Type.getArgumentTypes("((I)V");
+
+    assertThrows(IllegalArgumentException.class, getArgumentTypes);
+  }
+
+  @Test
   void testGetReturnTypeFromMethod() throws NoSuchMethodException, SecurityException {
     Type returnType =
         Type.getReturnType(Arrays.class.getMethod("binarySearch", byte[].class, byte.class));
 
     assertEquals(Type.INT_TYPE, returnType);
+  }
+
+  @Test
+  void testGetReturnType_invalidDescriptor() {
+    Executable getReturnType = () -> Type.getReturnType("(I)(I)V");
+
+    assertThrows(IllegalArgumentException.class, getReturnType);
   }
 
   @Test

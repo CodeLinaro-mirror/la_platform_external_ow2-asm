@@ -1438,6 +1438,7 @@ public class CheckMethodAdapter extends MethodVisitor {
           ++pos;
         }
         if (pos < descriptor.length()) {
+          // This recursive call cannot make any further ones (element type is not an array type).
           return checkDescriptor(version, descriptor, pos, false);
         } else {
           throw new IllegalArgumentException(INVALID_DESCRIPTOR + descriptor);
