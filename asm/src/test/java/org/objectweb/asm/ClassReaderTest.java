@@ -41,6 +41,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,6 +50,7 @@ import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.objectweb.asm.test.AsmTest;
 
 /**
@@ -436,6 +438,35 @@ class ClassReaderTest extends AsmTest implements Opcodes {
     Executable accept = () -> classReader.accept(classVisitor, 0);
 
     assertDoesNotThrow(accept);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {255, 256})
+  void testAccept_emptyVisitor_deepAnnotations(final int depth) {
+    ClassWriter classWriter = new ClassWriter(0);
+    classWriter.visit(
+        V1_5, ACC_PUBLIC + ACC_SUPER, "DeepAnnotations", null, "java/lang/Object", null);
+    ArrayList<AnnotationVisitor> visitors = new ArrayList<>();
+    visitors.add(classWriter.visitAnnotation("LAnnotation;", false));
+    for (int i = 0; i < depth; ++i) {
+      visitors.add(visitors.get(i).visitAnnotation("value", "LAnnotation" + i + ";"));
+    }
+    for (int i = visitors.size() - 1; i >= 0; --i) {
+      visitors.get(i).visitEnd();
+    }
+    classWriter.visitEnd();
+    byte[] classFile = classWriter.toByteArray();
+    ClassReader classReader = new ClassReader(classFile);
+
+    Executable accept =
+        () -> classReader.accept(new EmptyClassVisitor(/* latest */ Opcodes.ASM10_EXPERIMENTAL), 0);
+
+    if (depth < 256) {
+      assertDoesNotThrow(accept);
+    } else {
+      LimitExceededException e = assertThrows(LimitExceededException.class, accept);
+      assertEquals("Too many nested annotations", e.getMessage());
+    }
   }
 
   /** Tests the ClassReader accept method with a class whose content is invalid. */

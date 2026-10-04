@@ -181,6 +181,7 @@ public abstract class AsmTest {
     JDK5_ANNOTATION("jdk5.AllStructures$InvisibleAnnotation"),
     JDK5_ENUM("jdk5.AllStructures$EnumClass"),
     JDK5_LOCAL_CLASS("jdk5.AllStructures$1LocalClass"),
+    JDK5_LARGE_STRUCTURES("jdk5.LargeStructures"),
     JDK8_ALL_FRAMES("jdk8.AllFrames", JdkVersion.JDK8),
     JDK8_ALL_INSTRUCTIONS("jdk8.AllInstructions", JdkVersion.JDK8),
     JDK8_ALL_STRUCTURES("jdk8.AllStructures", JdkVersion.JDK8),
