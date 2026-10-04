@@ -415,25 +415,36 @@ public class SimpleVerifier extends BasicVerifier {
       return true;
     }
     if (currentClass != null && currentClass.equals(type1)) {
+      // Iterate over the ancestor classes of type2, until type1 is found or Object is reached.
+      // Limit the number of iterations to prevent infinite loops (getSuperClass() might read buggy
+      // class files with a cyclic type "hierarchy").
       Type superType2 = getSuperClass(type2);
-      if (superType2 == null) {
-        return false;
+      for (int i = 0; i < 256; ++i) {
+        if (superType2 == null) {
+          return false;
+        }
+        if (isInterface) {
+          // This should always be true, given the preconditions of this method, but is kept for
+          // backward compatibility.
+          return type2.getSort() == Type.OBJECT || type2.getSort() == Type.ARRAY;
+        }
+        if (type1.equals(superType2)) {
+          return true;
+        }
+        superType2 = getSuperClass(superType2);
+        numOperations += 5;
       }
-      if (isInterface) {
-        // This should always be true, given the preconditions of this method, but is kept for
-        // backward compatibility.
-        return type2.getSort() == Type.OBJECT || type2.getSort() == Type.ARRAY;
-      }
-      return isAssignableFrom(type1, superType2);
-    }
-    if (currentClass != null && currentClass.equals(type2)) {
-      if (isAssignableFrom(type1, currentSuperClass)) {
+      // Fallback to Class.isAssignableFrom(), at the end of this method.
+    } else if (currentClass != null && currentClass.equals(type2)) {
+      if (type1.equals(currentSuperClass)
+          || getClass(type1).isAssignableFrom(getClass(currentSuperClass))) {
         return true;
       }
       if (currentClassInterfaces != null) {
         numOperations += currentClassInterfaces.size();
         for (Type currentClassInterface : currentClassInterfaces) {
-          if (isAssignableFrom(type1, currentClassInterface)) {
+          if (type1.equals(currentClassInterface)
+              || getClass(type1).isAssignableFrom(getClass(currentClassInterface))) {
             return true;
           }
         }
